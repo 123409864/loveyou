@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>♡ для Кости</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0b2b5e 0%, #1a4d8c 35%, #3b82f6 70%, #7ab3f0 100%);
+            background-attachment: fixed;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            animation: bgShift 8s ease infinite alternate;
+        }
+
+        @keyframes bgShift {
+            0% {
+                background: linear-gradient(135deg, #0b2b5e 0%, #1a4d8c 35%, #3b82f6 70%, #7ab3f0 100%);
+            }
+            50% {
+                background: linear-gradient(135deg, #0f3a7a 0%, #2b5ea0 35%, #4f8df7 70%, #8abdf5 100%);
+            }
+            100% {
+                background: linear-gradient(135deg, #0b2b5e 0%, #1a4d8c 35%, #3b82f6 70%, #7ab3f0 100%);
+            }
+        }
+
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .heart-bg i {
+            position: absolute;
+            display: block;
+            font-size: 1.5rem;
+            opacity: 0.4;
+            animation: floatHeart 12s linear infinite;
+            user-select: none;
+            color: #ffffff;
+            text-shadow: 0 0 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0.7;
+            }
+        }
+
+        .card {
+            position: relative;
+            z-index: 10;
+            max-width: 520px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 48px;
+            padding: 32px 28px 40px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #0b2b5e, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .artist {
+            font-size: 1rem;
+            color: #3b82f6;
+            opacity: 0.8;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .voice-player {
+            background: #1e3a5f;
+            border-radius: 28px;
+            padding: 14px 18px;
+            margin: 20px 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-btn {
+            background: white;
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #1e3a5f;
+            font-weight: bold;
+            transition: all 0.1s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:active {
+            transform: scale(0.94);
+        }
+
+        .controls {
+            flex: 1;
+        }
+
+        .time {
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-bottom: 8px;
+            color: #e0f0ff;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #ffd966;
+            border-radius: 10px;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 26px 24px;
+            border-radius: 32px;
+            font-size: 1.05rem;
+            line-height: 1.55;
+            color: #0b2b5e;
+            text-align: left;
+            margin-top: 8px;
+            font-weight: 500;
+            border: 1px solid rgba(59,130,246,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .error-message {
+            margin-top: 12px;
+            font-size: 0.7rem;
+            color: #ffaaaa;
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 4px 12px;
+            display: inline-block;
+        }
+
+        @media (max-width: 500px) {
+            .card { padding: 22px 18px 28px; }
+            .title { font-size: 1.6rem; }
+            .message { font-size: 0.95rem; padding: 20px 18px; }
+            .voice-player { padding: 12px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="heart-bg" id="heart-bg"></div>
+
+<div class="card">
+    <div class="title">♡ Nympho</div>
+    <div class="artist">aquakey</div>
+
+    <div class="voice-player">
+        <button class="play-btn" id="playPause">▶</button>
+        <div class="controls">
+            <div class="time">
+                <span id="current">0:00</span> / <span id="total">0:00</span>
+            </div>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+    <div id="audioError" class="error-message" style="display: none;">⚠️ Не удалось загрузить музыку. Проверьте файл music/Nympho.mp3</div>
+
+    <div class="message">
+        💙 Костя, знаешь, я скучаю по тебе даже тогда, когда мы рядом. Это странное чувство — бесконечно хотеть быть ещё ближе к тебе. Ты сводишь меня с ума одним своим взглядом. Я так ценю каждую секунду, проведённую с тобой. Ты — мой любимый человек, мое вдохновение и моё самое лучшее приключение. Люблю тебя безумно! 💙
+    </div>
+</div>
+
+<script>
+    // ===== БЕЛЫЕ СЕРДЕЧКИ =====
+    const heartContainer = document.getElementById('heart-bg');
+    for (let i = 0; i < 45; i++) {
+        let heart = document.createElement('i');
+        heart.innerHTML = '🤍';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = 8 + Math.random() * 14 + 's';
+        heart.style.animationDelay = Math.random() * 15 + 's';
+        heart.style.fontSize = 1 + Math.random() * 2.2 + 'rem';
+        heart.style.opacity = 0.2 + Math.random() * 0.4;
+        heartContainer.appendChild(heart);
+    }
+
+    // ===== АУДИОПЛЕЕР =====
+    const audio = new Audio('kostya/music/Nympho.mp3');
+    const playBtn = document.getElementById('playPause');
+    const currentSpan = document.getElementById('current');
+    const totalSpan = document.getElementById('total');
+    const progressFill = document.getElementById('progressFill');
+    const progressBar = document.getElementById('progressBar');
+    const errorDiv = document.getElementById('audioError');
+
+    let isPlaying = false;
+
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function updateProgress() {
+        if (!isNaN(audio.duration) && isFinite(audio.duration)) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = percent + '%';
+            currentSpan.textContent = formatTime(audio.currentTime);
+        }
+    }
+
+    audio.addEventListener('loadedmetadata', () => {
+        totalSpan.textContent = formatTime(audio.duration);
+        errorDiv.style.display = 'none';
+    });
+
+    audio.addEventListener('timeupdate', updateProgress);
+
+    audio.addEventListener('ended', () => {
+        playBtn.textContent = '▶';
+        isPlaying = false;
+        progressFill.style.width = '0%';
+        currentSpan.textContent = '0:00';
+    });
+
+    audio.addEventListener('error', (e) => {
+        console.error('Ошибка аудио:', e);
+        errorDiv.style.display = 'block';
+        playBtn.disabled = true;
+        playBtn.style.opacity = '0.5';
+        playBtn.style.cursor = 'not-allowed';
+    });
+
+    playBtn.addEventListener('click', () => {
+        if (playBtn.disabled) return;
+        
+        if (audio.paused) {
+            audio.play().then(() => {
+                playBtn.textContent = '⏸';
+                isPlaying = true;
+            }).catch(err => {
+                console.warn('Автовоспроизведение заблокировано:', err);
+                audio.play().catch(e => console.log(e));
+            });
+        } else {
+            audio.pause();
+            playBtn.textContent = '▶';
+            isPlaying = false;
+        }
+    });
+
+    progressBar.addEventListener('click', (e) => {
+        if (playBtn.disabled) return;
+        const rect = progressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const width = rect.width;
+        const percent = clickX / width;
+        if (audio.duration && isFinite(audio.duration)) {
+            audio.currentTime = percent * audio.duration;
+            updateProgress();
+        }
+    });
+</script>
+</body>
+</html>
